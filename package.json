@@ -1,0 +1,18 @@
+{
+  "name": "feedback-management-system",
+  "version": "1.0.0",
+  "description": "Full-stack Feedback Management System with 3 Roles (Admin, Faculty/Staff, Student/Client) for Web Technology Lab Mini Project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "feedback-management",
+    "web-technology",
+    "lab-project",
+    "nodejs",
+    "fullstack"
+  ],
+  "author": "Web Tech Lab Project",
+  "license": "MIT"
+}

@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FeedbackHub | Feedback Management System</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar" id="mainNavbar">
+    <div class="nav-container">
+      <div class="brand" onclick="navigateTo('dashboard')">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">FeedbackHub</span>
+          <span class="brand-sub">Web Tech Lab Mini Project</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links (Dynamic per role) -->
+      <nav class="nav-menu" id="navLinks">
+        <!-- Rendered dynamically in app.js -->
+      </nav>
+
+      <!-- User Profile / Auth Area -->
+      <div class="nav-auth" id="navAuth">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Main View Container -->
+  <main class="main-content" id="appRoot">
+
+    <!-- 1. AUTHENTICATION VIEW -->
+    <section id="authSection" class="view-section">
+      <div class="auth-hero">
+        <span class="badge badge-accent">3-Role Web Portal</span>
+        <h1>Multi-Role Feedback & Grievance System</h1>
+        <p class="subtitle">A complete Web Technology lab project supporting Students, Faculty/Staff, and System Administrators.</p>
+
+        <!-- Quick 1-Click Demo Logins for Lab Examiner / Evaluation -->
+        <div class="demo-box">
+          <div class="demo-title">⚡ 1-Click Demo Login (Instant Lab Viva Testing)</div>
+          <div class="demo-buttons">
+            <button type="button" class="btn btn-demo" onclick="quickLogin('admin@example.com', 'admin123')">
+              <span class="demo-role-tag role-admin">Admin</span>
+              <span>System Administrator</span>
+            </button>
+            <button type="button" class="btn btn-demo" onclick="quickLogin('faculty@example.com', 'faculty123')">
+              <span class="demo-role-tag role-staff">User 2: Faculty</span>
+              <span>Dr. Alan Turing</span>
+            </button>
+            <button type="button" class="btn btn-demo" onclick="quickLogin('student@example.com', 'student123')">
+              <span class="demo-role-tag role-student">User 1: Student</span>
+              <span>John Doe</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth Form Box -->
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+          <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Register New Account</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" placeholder="e.g. student@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">
+            Sign In to Dashboard
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="registerForm" class="auth-form hidden" onsubmit="handleRegister(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="regName">Full Name</label>
+              <input type="text" id="regName" placeholder="e.g. John Doe" required>
+            </div>
+            <div class="form-group">
+              <label for="regEmail">Email Address</label>
+              <input type="email" id="regEmail" placeholder="e.g. user@example.com" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="regPassword">Password</label>
+              <input type="password" id="regPassword" placeholder="Min 6 characters" required>
+            </div>
+            <div class="form-group">
+              <label for="regRole">I am registering as:</label>
+              <select id="regRole" onchange="toggleRegRoleFields()">
+                <option value="student">Student / Submitter (User 1)</option>
+                <option value="staff">Faculty / Staff Member (User 2)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="regDepartment">Department</label>
+              <select id="regDepartment" required>
+                <option value="">Select Department...</option>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+            <div class="form-group" id="regExtraFieldContainer">
+              <label for="regExtraField" id="regExtraLabel">Roll / Registration Number</label>
+              <input type="text" id="regExtraField" placeholder="e.g. CS2026-042">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="regSubmitBtn">
+            Create Account
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 2. STUDENT (USER 1) VIEW -->
+    <section id="studentSection" class="view-section hidden">
+      <div class="section-header">
+        <div>
+          <h2>Student Portal</h2>
+          <p class="section-desc">Submit constructive feedback, evaluate faculty/courses, and track response status.</p>
+        </div>
+        <button class="btn btn-primary" onclick="openFeedbackModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Submit New Feedback
+        </button>
+      </div>
+
+      <!-- Student Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="studentStatTotal">0</div>
+          <div class="stat-label">Feedbacks Submitted</div>
+        </div>
+        <div class="stat-card stat-success">
+          <div class="stat-value" id="studentStatResponded">0</div>
+          <div class="stat-label">Responded by Faculty</div>
+        </div>
+        <div class="stat-card stat-warning">
+          <div class="stat-value" id="studentStatPending">0</div>
+          <div class="stat-label">Under Review / Pending</div>
+        </div>
+        <div class="stat-card stat-accent">
+          <div class="stat-value" id="studentStatAvg">0.0</div>
+          <div class="stat-label">Avg Rating Given</div>
+        </div>
+      </div>
+
+      <!-- Student Submissions Filter & List -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">My Feedback Submissions</div>
+          <div class="filters-row">
+            <input type="text" id="studentSearch" class="form-control" placeholder="Search feedback..." oninput="filterStudentFeedbacks()">
+            <select id="studentStatusFilter" class="form-control" onchange="filterStudentFeedbacks()">
+              <option value="All">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Under Review">Under Review</option>
+              <option value="Responded">Responded</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+        </div>
+        <div id="studentFeedbackList" class="feedback-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. FACULTY / STAFF (USER 2) VIEW -->
+    <section id="staffSection" class="view-section hidden">
+      <div class="section-header">
+        <div>
+          <h2>Faculty & Staff Feedback Console</h2>
+          <p class="section-desc">Review feedback submitted by students, assess performance criteria, and respond directly.</p>
+        </div>
+        <button class="btn btn-outline" onclick="loadDashboard()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          Refresh Data
+        </button>
+      </div>
+
+      <!-- Staff Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="staffStatTotal">0</div>
+          <div class="stat-label">Feedbacks Received</div>
+        </div>
+        <div class="stat-card stat-accent">
+          <div class="stat-value" id="staffStatRating">0.0 ★</div>
+          <div class="stat-label">Average Overall Rating</div>
+        </div>
+        <div class="stat-card stat-warning">
+          <div class="stat-value" id="staffStatAwaiting">0</div>
+          <div class="stat-label">Pending Replies</div>
+        </div>
+        <div class="stat-card stat-success">
+          <div class="stat-value" id="staffStatResolved">0</div>
+          <div class="stat-label">Responded / Resolved</div>
+        </div>
+      </div>
+
+      <!-- Staff Criteria Breakdown -->
+      <div class="card criteria-card">
+        <div class="card-title">Performance Metrics Breakdown</div>
+        <div class="criteria-grid">
+          <div class="criteria-bar-box">
+            <div class="criteria-info"><span>Teaching & Course Delivery</span><span id="critTeaching">0.0 / 5</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="barTeaching" style="width: 0%"></div></div>
+          </div>
+          <div class="criteria-bar-box">
+            <div class="criteria-info"><span>Communication & Clarity</span><span id="critComm">0.0 / 5</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="barComm" style="width: 0%"></div></div>
+          </div>
+          <div class="criteria-bar-box">
+            <div class="criteria-info"><span>Punctuality & Discipline</span><span id="critPunct">0.0 / 5</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="barPunct" style="width: 0%"></div></div>
+          </div>
+          <div class="criteria-bar-box">
+            <div class="criteria-info"><span>Doubt Clearing & Support</span><span id="critSupport">0.0 / 5</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="barSupport" style="width: 0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Staff Feedback Feed -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Received Feedback Feed</div>
+          <div class="filters-row">
+            <input type="text" id="staffSearch" class="form-control" placeholder="Search feedback..." oninput="filterStaffFeedbacks()">
+            <select id="staffRatingFilter" class="form-control" onchange="filterStaffFeedbacks()">
+              <option value="All">All Ratings</option>
+              <option value="5">5 Stars</option>
+              <option value="4">4 Stars</option>
+              <option value="3">3 Stars</option>
+              <option value="2">2 Stars</option>
+              <option value="1">1 Star</option>
+            </select>
+          </div>
+        </div>
+        <div id="staffFeedbackList" class="feedback-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. ADMIN VIEW -->
+    <section id="adminSection" class="view-section hidden">
+      <div class="section-header">
+        <div>
+          <h2>System Administration Dashboard</h2>
+          <p class="section-desc">Complete governance: user roles, department catalogs, cross-institution feedback analytics.</p>
+        </div>
+        <div class="admin-actions">
+          <button class="btn btn-outline" onclick="exportData('csv')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export CSV
+          </button>
+          <button class="btn btn-outline" onclick="exportData('json')">Export JSON</button>
+          <button class="btn btn-primary" onclick="openNewUserModal()">+ Add New User</button>
+        </div>
+      </div>
+
+      <!-- Admin Top Metrics -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="adminTotalFeedbacks">0</div>
+          <div class="stat-label">Total Feedbacks</div>
+        </div>
+        <div class="stat-card stat-accent">
+          <div class="stat-value" id="adminAvgScore">0.0 ★</div>
+          <div class="stat-label">Institutional Avg Rating</div>
+        </div>
+        <div class="stat-card stat-info">
+          <div class="stat-value" id="adminTotalStaff">0</div>
+          <div class="stat-label">Faculty / Staff Members</div>
+        </div>
+        <div class="stat-card stat-success">
+          <div class="stat-value" id="adminTotalStudents">0</div>
+          <div class="stat-label">Registered Students</div>
+        </div>
+      </div>
+
+      <!-- Admin Visual Charts & Breakdown -->
+      <div class="charts-row">
+        <!-- Rating Distribution Chart -->
+        <div class="card chart-card">
+          <div class="card-title">Rating Score Distribution</div>
+          <div class="chart-bars" id="chartRatingBars">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Feedback by Category / Department -->
+        <div class="card chart-card">
+          <div class="card-title">Submissions by Category</div>
+          <div class="category-list" id="categoryDistributionList">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Sub-Navigation Tabs -->
+      <div class="admin-subtabs">
+        <button class="admin-subtab active" onclick="switchAdminTab('allFeedbacks')">All Feedback Records</button>
+        <button class="admin-subtab" onclick="switchAdminTab('users')">User Directory & Roles</button>
+        <button class="admin-subtab" onclick="switchAdminTab('departments')">Departments & Categories</button>
+      </div>
+
+      <!-- Tab 1: All Feedbacks -->
+      <div id="adminTabFeedbacks" class="admin-tab-content">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Master Feedback Registry</div>
+            <div class="filters-row">
+              <input type="text" id="adminSearch" class="form-control" placeholder="Search any feedback..." oninput="filterAdminFeedbacks()">
+              <select id="adminCategoryFilter" class="form-control" onchange="filterAdminFeedbacks()">
+                <option value="All">All Categories</option>
+              </select>
+              <select id="adminStatusFilter" class="form-control" onchange="filterAdminFeedbacks()">
+                <option value="All">All Statuses</option>
+                <option value="Pending">Pending</option>
+                <option value="Under Review">Under Review</option>
+                <option value="Responded">Responded</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+            </div>
+          </div>
+          <div id="adminFeedbackTableContainer" class="table-responsive">
+            <!-- Table dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Users Management -->
+      <div id="adminTabUsers" class="admin-tab-content hidden">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">User Accounts Management</div>
+          </div>
+          <div id="adminUsersTableContainer" class="table-responsive">
+            <!-- Table dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Department Management -->
+      <div id="adminTabDepartments" class="admin-tab-content hidden">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Departments & Academic Units</div>
+            <button class="btn btn-sm btn-primary" onclick="openNewDeptModal()">+ Add Department</button>
+          </div>
+          <div id="adminDeptTableContainer" class="table-responsive">
+            <!-- Table dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODALS -->
+
+  <!-- 1. Submit Feedback Modal (Student) -->
+  <div class="modal-overlay hidden" id="feedbackModal">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Submit Constructive Feedback</h3>
+        <button class="modal-close" onclick="closeFeedbackModal()">&times;</button>
+      </div>
+      <form id="newFeedbackForm" onsubmit="handleFeedbackSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fbDepartment">Department *</label>
+            <select id="fbDepartment" class="form-control" required onchange="handleDepartmentChange()">
+              <option value="">Select Department...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fbStaff">Faculty / Staff Member (Optional)</label>
+            <select id="fbStaff" class="form-control">
+              <option value="">Department Incharge / General</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fbCategory">Category *</label>
+            <select id="fbCategory" class="form-control" required>
+              <option value="Academic / Faculty">Academic / Faculty</option>
+              <option value="Course Curriculum">Course Curriculum</option>
+              <option value="Infrastructure / Labs">Infrastructure / Labs</option>
+              <option value="Library & Resources">Library & Resources</option>
+              <option value="Canteen & Facilities">Canteen & Facilities</option>
+              <option value="Administration">Administration</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fbType">Feedback Type *</label>
+            <select id="fbType" class="form-control" required>
+              <option value="Appreciation">Appreciation / Compliment</option>
+              <option value="Suggestion">Constructive Suggestion</option>
+              <option value="Grievance / Issue">Grievance / Issue</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fbSubject">Subject / Topic *</label>
+          <input type="text" id="fbSubject" class="form-control" placeholder="Brief summary of your feedback..." required>
+        </div>
+
+        <!-- Star Rating Widget -->
+        <div class="rating-section-box">
+          <div class="rating-group">
+            <label>Overall Experience Rating *</label>
+            <div class="star-rating" id="starRatingOverall">
+              <span class="star" data-val="1">★</span>
+              <span class="star" data-val="2">★</span>
+              <span class="star" data-val="3">★</span>
+              <span class="star" data-val="4">★</span>
+              <span class="star" data-val="5">★</span>
+              <span class="rating-text" id="starOverallText">5.0 / 5 (Excellent)</span>
+            </div>
+          </div>
+
+          <div class="criteria-ratings-grid">
+            <div class="rating-criterion">
+              <label>Teaching / Quality</label>
+              <select id="rateTeaching" class="form-control form-control-sm">
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Good</option>
+                <option value="3">3 - Satisfactory</option>
+                <option value="2">2 - Needs Improvement</option>
+                <option value="1">1 - Unsatisfactory</option>
+              </select>
+            </div>
+            <div class="rating-criterion">
+              <label>Communication</label>
+              <select id="rateComm" class="form-control form-control-sm">
+                <option value="5">5 - Clear & Engaging</option>
+                <option value="4">4 - Well Explained</option>
+                <option value="3">3 - Average</option>
+                <option value="2">2 - Rushed</option>
+                <option value="1">1 - Unclear</option>
+              </select>
+            </div>
+            <div class="rating-criterion">
+              <label>Punctuality</label>
+              <select id="ratePunct" class="form-control form-control-sm">
+                <option value="5">5 - Always On Time</option>
+                <option value="4">4 - Usually On Time</option>
+                <option value="3">3 - Occasional Delays</option>
+                <option value="2">2 - Frequently Late</option>
+                <option value="1">1 - Irregular</option>
+              </select>
+            </div>
+            <div class="rating-criterion">
+              <label>Support & Guidance</label>
+              <select id="rateSupport" class="form-control form-control-sm">
+                <option value="5">5 - Outstanding Support</option>
+                <option value="4">4 - Helpful</option>
+                <option value="3">3 - Moderate</option>
+                <option value="2">2 - Limited</option>
+                <option value="1">1 - Not Available</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="fbComments">Detailed Feedback & Comments *</label>
+          <textarea id="fbComments" class="form-control" rows="4" placeholder="Provide detailed remarks, what went well, or what could be improved..." required></textarea>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="fbAnonymous">
+          <label for="fbAnonymous">Submit anonymously (Your name and email will be hidden from faculty)</label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeFeedbackModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitFeedback">Submit Feedback</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Reply / Detail Modal (Staff & Admin) -->
+  <div class="modal-overlay hidden" id="replyModal">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="replyModalTitle">Feedback Details & Response</h3>
+        <button class="modal-close" onclick="closeReplyModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="replyModalBody">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Add User Modal (Admin) -->
+  <div class="modal-overlay hidden" id="newUserModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New User</h3>
+        <button class="modal-close" onclick="closeNewUserModal()">&times;</button>
+      </div>
+      <form id="newUserForm" onsubmit="handleCreateUser(event)">
+        <div class="form-group">
+          <label for="newUserName">Full Name *</label>
+          <input type="text" id="newUserName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="newUserEmail">Email Address *</label>
+          <input type="email" id="newUserEmail" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="newUserPassword">Initial Password *</label>
+          <input type="password" id="newUserPassword" class="form-control" required value="user123">
+        </div>
+        <div class="form-group">
+          <label for="newUserRole">User Role *</label>
+          <select id="newUserRole" class="form-control" required>
+            <option value="student">Student (User 1)</option>
+            <option value="staff">Faculty / Staff (User 2)</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="newUserDept">Department</label>
+          <select id="newUserDept" class="form-control">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeNewUserModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Add Department Modal (Admin) -->
+  <div class="modal-overlay hidden" id="newDeptModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Add New Department</h3>
+        <button class="modal-close" onclick="closeNewDeptModal()">&times;</button>
+      </div>
+      <form id="newDeptForm" onsubmit="handleCreateDept(event)">
+        <div class="form-group">
+          <label for="deptName">Department Name *</label>
+          <input type="text" id="deptName" class="form-control" placeholder="e.g. Mechanical Engineering" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="deptCode">Department Code *</label>
+            <input type="text" id="deptCode" class="form-control" placeholder="e.g. MECH" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="deptDesc">Description</label>
+          <input type="text" id="deptDesc" class="form-control" placeholder="Brief info about department">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeNewDeptModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Department</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <p>FeedbackHub &copy; 2026 &bull; Web Technology Laboratory Mini Project</p>
+      <p class="footer-sub">Designed with Semantic HTML5, CSS3 Variables & Responsive Flex/Grid, Vanilla JavaScript, and Node.js REST API Architecture.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

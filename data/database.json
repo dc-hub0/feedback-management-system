@@ -1,0 +1,177 @@
+{
+  "users": [
+    {
+      "id": "usr-admin-1",
+      "name": "System Administrator",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "admin",
+      "department": "Administration",
+      "createdAt": "2026-10-15T09:00:00.000Z"
+    },
+    {
+      "id": "usr-staff-1",
+      "name": "Dr. Alan Turing",
+      "email": "faculty@example.com",
+      "password": "faculty123",
+      "role": "staff",
+      "department": "Computer Science & Engineering",
+      "title": "Associate Professor",
+      "createdAt": "2026-10-16T10:30:00.000Z"
+    },
+    {
+      "id": "usr-staff-2",
+      "name": "Prof. Grace Hopper",
+      "email": "grace@example.com",
+      "password": "grace123",
+      "role": "staff",
+      "department": "Information Technology",
+      "title": "HOD & Professor",
+      "createdAt": "2026-10-17T11:15:00.000Z"
+    },
+    {
+      "id": "usr-student-1",
+      "name": "John Doe",
+      "email": "student@example.com",
+      "password": "student123",
+      "role": "student",
+      "department": "Computer Science & Engineering",
+      "rollNo": "CS2026-042",
+      "createdAt": "2026-10-18T14:00:00.000Z"
+    },
+    {
+      "id": "usr-student-2",
+      "name": "Emily Watson",
+      "email": "emily@example.com",
+      "password": "emily123",
+      "role": "student",
+      "department": "Information Technology",
+      "rollNo": "IT2026-019",
+      "createdAt": "2026-10-19T15:20:00.000Z"
+    },
+    {
+      "id": "usr-1793543773926-mnlw7o",
+      "name": "RED",
+      "email": "red@gmail.com",
+      "password": "Red@123",
+      "role": "staff",
+      "department": "MCA",
+      "rollNo": null,
+      "title": "Proffessor",
+      "createdAt": "2026-11-01T14:36:13.926Z"
+    }
+  ],
+  "departments": [
+    {
+      "id": "dept-1",
+      "name": "Computer Science & Engineering",
+      "code": "CSE",
+      "description": "Department of Computer Science and Systems"
+    },
+    {
+      "id": "dept-2",
+      "name": "Information Technology",
+      "code": "IT",
+      "description": "Department of Information Systems and Web Technologies"
+    },
+    {
+      "id": "dept-3",
+      "name": "Electronics & Communication",
+      "code": "ECE",
+      "description": "Department of Electronics and VLSI"
+    },
+    {
+      "id": "dept-4",
+      "name": "Library & Learning Center",
+      "code": "LIB",
+      "description": "Central Campus Library and Digital Repository"
+    },
+    {
+      "id": "dept-5",
+      "name": "Campus Facilities & Infrastructure",
+      "code": "FAC",
+      "description": "Hostel, Canteen, Sports and Lab Infrastructure"
+    },
+    {
+      "id": "dept-1793542909830-zuqdo2",
+      "name": "MCA",
+      "code": "MCAENG",
+      "description": "clg"
+    }
+  ],
+  "feedbacks": [
+    {
+      "id": "fb-1793543847025-swuzkl",
+      "userId": "usr-student-1",
+      "userName": "John Doe",
+      "userEmail": "student@example.com",
+      "isAnonymous": false,
+      "category": "Administration",
+      "department": "MCA",
+      "staffId": "usr-1793543773926-mnlw7o",
+      "staffName": "RED",
+      "subject": "Teaching Appreation",
+      "ratings": {
+        "overall": 3,
+        "teaching": 5,
+        "communication": 5,
+        "punctuality": 5,
+        "support": 5
+      },
+      "type": "Grievance / Issue",
+      "comments": "Love the sirs teaching and the feedback is that teach whit all your heart",
+      "status": "Resolved",
+      "createdAt": "2026-11-01T14:37:27.025Z",
+      "replies": [
+        {
+          "id": "rep-1793543896026-2gv2sh",
+          "userId": "usr-1793543773926-mnlw7o",
+          "userName": "RED (Faculty)",
+          "message": "Thanks for the feedback ill work on that so that this feedback will not change",
+          "createdAt": "2026-11-01T14:38:16.027Z"
+        }
+      ],
+      "updatedAt": "2026-11-01T14:38:35.475Z"
+    },
+    {
+      "id": "fb-1793543347527-2vhw5d",
+      "userId": "usr-student-1",
+      "userName": "John Doe",
+      "userEmail": "student@example.com",
+      "isAnonymous": false,
+      "category": "Canteen & Facilities",
+      "department": "Computer Science & Engineering",
+      "staffId": "usr-staff-1",
+      "staffName": "Dr. Alan Turing",
+      "subject": "About teacher performance",
+      "ratings": {
+        "overall": 2,
+        "teaching": 4,
+        "communication": 3,
+        "punctuality": 4,
+        "support": 4
+      },
+      "type": "Suggestion",
+      "comments": "Teacher personality is good but strict in teaching",
+      "status": "Resolved",
+      "createdAt": "2026-11-01T14:29:07.527Z",
+      "replies": [
+        {
+          "id": "rep-1793543392510-au4qc7",
+          "userId": "usr-staff-1",
+          "userName": "Dr. Alan Turing (Faculty)",
+          "message": "Yeah u should study more harder",
+          "createdAt": "2026-11-01T14:29:52.510Z"
+        },
+        {
+          "id": "rep-1793543429293-ywvd4o",
+          "userId": "usr-admin-1",
+          "userName": "System Administrator (Administrator)",
+          "message": "Yeah everything is resolverd i think",
+          "createdAt": "2026-11-01T14:30:29.293Z"
+        }
+      ],
+      "updatedAt": "2026-11-01T14:30:29.301Z"
+    }
+  ]
+}
