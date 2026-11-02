@@ -59,6 +59,28 @@
       "rollNo": null,
       "title": "Proffessor",
       "createdAt": "2026-11-01T14:36:13.926Z"
+    },
+    {
+      "id": "usr-1793625647477-qpeb69",
+      "name": "RED",
+      "email": "moh@gmail.com",
+      "password": "123456",
+      "role": "staff",
+      "department": "MCA",
+      "rollNo": null,
+      "title": "Proffessor",
+      "createdAt": "2026-11-02T13:20:47.478Z"
+    },
+    {
+      "id": "usr-1793625679073-owd9z8",
+      "name": "RED1",
+      "email": "rrrr@gmail.com",
+      "password": "user123",
+      "role": "staff",
+      "department": "Computer Science & Engineering",
+      "title": null,
+      "rollNo": null,
+      "createdAt": "2026-11-02T13:21:19.073Z"
     }
   ],
   "departments": [
